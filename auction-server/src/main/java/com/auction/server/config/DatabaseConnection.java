@@ -8,16 +8,13 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
 
-    private final String URL = "jdbc:mysql://localhost:3306/online_auction";
-    private final String USER = "root";
-    private final String PASSWORD = "";
+    private static final String URL = "jdbc:sqlite:auction.db";
 
     private DatabaseConnection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            this.connection = DriverManager.getConnection(URL);
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi kết nối cơ sở dữ liệu: " + e.getMessage(), e);
         }
     }
 
@@ -31,10 +28,10 @@ public class DatabaseConnection {
     public Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
-                connection = DriverManager.getConnection(URL, USER, PASSWORD);
+                connection = DriverManager.getConnection(URL);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Lỗi tái thiết lập kết nối DB: " + e.getMessage(), e);
         }
         return connection;
     }
