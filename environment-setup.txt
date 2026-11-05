@@ -1,0 +1,141 @@
+=====================================================================
+ONLINE AUCTION SYSTEM - ENVIRONMENT CONFIGURATION SUMMARY
+(Tom tat cau hinh moi truong phat trien va chay du an)
+=====================================================================
+
+1. THONG TIN DU AN
+---------------------------------------------------------------------
+Ten du an      : Online Auction System (BTL-LTNC-N3)
+Mo hinh        : Client - Server giao tiep qua Socket
+Ngon ngu       : Java
+Cong cu build  : Apache Maven (multi-module)
+Quan ly ma nguon: Git + GitHub
+CI/CD          : GitHub Actions (chay test tu dong)
+
+
+2. MOI TRUONG BAT BUOC (CA NHOM PHAI GIONG NHAU)
+---------------------------------------------------------------------
+JDK            : Java 21 (LTS)  -> BAT BUOC dung dung ban 21
+Apache Maven   : 3.9.x tro len
+JavaFX         : 21.0.6 (khai bao qua Maven, khong can cai rieng)
+JUnit          : 5.12.1 (Jupiter)
+Ma hoa file    : UTF-8
+IDE khuyen dung: IntelliJ IDEA (Community hoac Ultimate)
+He dieu hanh   : Windows / macOS / Linux deu chay duoc
+                 (moi thanh vien ghi he dieu hanh cua minh o muc 8)
+
+Luu y: KHONG dung Java 26 hoac cac ban khac 21. Khi code duoc bien
+dich bang ban Java moi hon ban dang chay se bi loi
+"UnsupportedClassVersionError".
+
+
+3. CAU TRUC MODULE MAVEN
+---------------------------------------------------------------------
+online-auction-system (pom.xml goc, packaging = pom)
+|
+|-- auction-common   : Model OOP, DTO, Enum dung chung
+|                      (khong phu thuoc module nao)
+|
+|-- auction-server   : Server Socket, DAO, xu ly dong thoi,
+|                      Anti-sniping, Auto-Bidding
+|                      (phu thuoc auction-common, JUnit de test)
+|
+|-- auction-client   : Giao dien JavaFX/FXML, Socket Client
+                       (phu thuoc auction-common, JavaFX)
+
+Quy uoc dat ten:
+  groupId  : com.auction
+  package  : com.auction.common / com.auction.server / com.auction.client
+  artifact : auction-common / auction-server / auction-client
+  version  : 1.0-SNAPSHOT
+
+Cau hinh dung chung (khai bao 1 lan o pom.xml goc):
+  maven.compiler.release        = 21
+  project.build.sourceEncoding  = UTF-8
+
+
+4. CAI DAT MOI TRUONG (TUNG BUOC)
+---------------------------------------------------------------------
+Buoc 1: Cai JDK 21 (vi du Temurin / OpenJDK 21).
+Buoc 2: Cai Apache Maven 3.9.x va them vao bien moi truong PATH.
+Buoc 3: Cai IntelliJ IDEA va Git.
+Buoc 4: Kiem tra phien ban bang cac lenh:
+
+        java -version      -> phai hien 21.x.x
+        mvn -v             -> phai hien Java version: 21.x.x
+        git --version
+
+Buoc 5: Clone repo ve may:
+
+        git clone <duong-dan-repo>
+
+Buoc 6: Mo thu muc goc cua repo bang IntelliJ
+        (mo file pom.xml goc -> chon "Open as Project").
+Buoc 7: Vao File > Project Structure > Project, dat
+        SDK = 21 va Language level = 21.
+Buoc 8: Vao Settings > Build, Execution, Deployment > Build Tools >
+        Maven > Runner, chon JRE = 21.
+
+
+5. LENH BUILD, TEST, CHAY
+---------------------------------------------------------------------
+Chay tai thu muc goc cua du an:
+
+  Build toan bo:        mvn clean install
+  Chay toan bo test:    mvn test
+  Build 1 module:       mvn -pl auction-server -am clean install
+  Chay client JavaFX:   mvn -pl auction-client javafx:run
+
+Server: lop main se duoc bo sung sau khi hoan thanh module server
+(dang cap nhat).
+
+Thu tu build: auction-common -> auction-server / auction-client
+(Maven tu dong sap xep dung thu tu khi build tu thu muc goc).
+
+
+6. QUY DINH LAM VIEC NHOM VOI GIT
+---------------------------------------------------------------------
+- Khong push truc tiep len nhanh main.
+- Moi tinh nang lam tren nhanh rieng:
+      git checkout -b feature/ten-tinh-nang
+- Dua code len qua Pull Request, co nguoi khac xem truoc khi merge.
+- Truoc khi push phai chay thanh cong: mvn clean install
+- Cac thu muc target/, .idea/, *.class, *.jar da duoc bo qua
+  boi .gitignore o thu muc goc.
+
+
+7. CO SO DU LIEU
+---------------------------------------------------------------------
+Loai CSDL     : (chua chot - nhom bo sung)
+Driver / ban  : (nhom bo sung)
+Cach ket noi  : Singleton Pattern o auction-server/config
+
+
+8. THONG TIN MOI TRUONG CUA TUNG THANH VIEN
+   (moi nguoi tu dien de thay co nam duoc moi truong thuc te)
+---------------------------------------------------------------------
+Thanh vien 1: He dieu hanh: ________  JDK: ________  Maven: ________
+Thanh vien 2: He dieu hanh: ________  JDK: ________  Maven: ________
+Thanh vien 3: He dieu hanh: ________  JDK: ________  Maven: ________
+Thanh vien 4: He dieu hanh: ________  JDK: ________  Maven: ________
+
+(Tat ca phai la JDK 21.)
+
+
+9. LOI THUONG GAP
+---------------------------------------------------------------------
+- "UnsupportedClassVersionError"
+    -> JDK dang chay cu hon JDK dung de build. Kiem tra lai java -version
+       va JDK trong IntelliJ, dam bao deu la 21.
+
+- "release version 21 not supported"
+    -> Maven dang dung JDK cu. Kiem tra mvn -v va bien JAVA_HOME.
+
+- Tieng Viet bi loi font trong code/console
+    -> Dam bao file luu UTF-8 va IntelliJ: Settings > Editor >
+       File Encodings = UTF-8.
+
+- Khong tim thay class cua auction-common khi build server/client
+    -> Chay mvn clean install o thu muc goc de cai common truoc.
+
+=====================================================================
